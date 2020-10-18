@@ -1,4 +1,5 @@
 #define LED_PIN  13
+#define DEBUG 1
 
 char alphabet[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 int moses[5][5] = {
@@ -15,7 +16,9 @@ int timeBreak = 1;
 String wordToType = "abc";
 
 void setup() {
+#ifdef DEBUG
   Serial.begin(9600);
+#endif
   pinMode(LED_PIN, OUTPUT);
 }
 
@@ -25,7 +28,9 @@ void loop() {
 }
 
 void showWord(String wordToType) {
+#ifdef DEBUG
   Serial.println("Печать слова");
+#endif
   for (int i = 0; i < wordToType.length(); i++) {
     char currentLetter = wordToType.charAt(i);
     showLetter(currentLetter);
@@ -36,13 +41,17 @@ void showWord(String wordToType) {
 }
 
 void showLetter(char letter) {
+#ifdef DEBUG
   Serial.println("Печать буквы");
+#endif
   int elementOfArray = findLetterInAlphabet(letter);
-  Serial.println(letter);
-  for (int i = 0; i < sizeof(moses[elementOfArray])/sizeof(moses[elementOfArray][0]); i++) {
+  for (int i = 0; i < sizeof(moses[elementOfArray]) / sizeof(moses[elementOfArray][0]); i++) {
+#ifdef DEBUG
+    Serial.print("Печать элемента "); Serial.println(i);
+#endif
     if (moses[elementOfArray][i] == 0) break;
     showElement(moses[elementOfArray][i]);
-    if (i + 1 != sizeof(moses[elementOfArray])) {
+    if (i + 1 != sizeof(moses[elementOfArray]) && moses[elementOfArray][i+1] != 0) {
       showBreakBetweenElementsOfLetter();
     }
   }
