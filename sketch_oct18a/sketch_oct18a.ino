@@ -6,8 +6,11 @@ int moses[5][5] = {
   {3, 1, 1, 1, 0},
   {3, 1, 3, 1, 0},
   {3, 1, 1, 0, 0},
-  {1, 0, 0, 0, 0},
+  {1, 0, 0, 0, 0}
 };
+int timeEndWord = 7;
+int timeEndLetter = 3;
+int timeBreak = 1;
 
 String wordToType = "abc";
 
@@ -17,38 +20,70 @@ void setup() {
 }
 
 void loop() {
-
-  pingWord();
-  endWord();
+  showWord(wordToType);
+  showBreakBetweenWords();
 }
 
-void pingWord(){
-  for (int i = 0; i < sizeof(wordToType); i++) {
-    char currentSymbol = wordToType.charAt(i);
-    showSymbol(currentSymbol);
-  } 
-}
-
-void showSymbol(char symbol) {
-  int numberOfArray = findInAlphabet(symbol);
-  pingASymbol(moses[numberOfArray]);
-}
-
-void pingASymbol(int seq[]){
-
-  for (int i = 0; i < sizeof(seq); i++) { 
-    digitalWrite(LED_PIN, 13);
-    delay(1000* seq[i]);
+void showWord(String wordToType) {
+  Serial.println("Печать слова");
+  for (int i = 0; i < wordToType.length(); i++) {
+    char currentLetter = wordToType.charAt(i);
+    showLetter(currentLetter);
+    if (i + 1 != wordToType.length()) {
+      showBreakBetweenLetters();
+    }
   }
-  
-  
 }
 
-int findInAlphabet(char symbol) {
+void showLetter(char letter) {
+  Serial.println("Печать буквы");
+  int elementOfArray = findLetterInAlphabet(letter);
+  Serial.println(letter);
+  for (int i = 0; i < sizeof(moses[elementOfArray])/sizeof(moses[elementOfArray][0]); i++) {
+    if (moses[elementOfArray][i] == 0) break;
+    showElement(moses[elementOfArray][i]);
+    if (i + 1 != sizeof(moses[elementOfArray])) {
+      showBreakBetweenElementsOfLetter();
+    }
+  }
+}
+
+
+int findLetterInAlphabet(char symbol) {
   for (int i = 0; i < sizeof(alphabet); i++) {
     if (alphabet[i] == symbol) {
-      Serial.print(i);
       return i;
     }
   }
+}
+
+void showBreakBetweenLetters() {
+  digitalWrite(LED_PIN, LOW);
+  Serial.println("Лампочка выключена");
+  Serial.println("***");
+  delay(1000 * timeEndLetter);
+}
+
+void showBreakBetweenWords() {
+  digitalWrite(LED_PIN, LOW);
+  Serial.println("Лампочка выключена");
+  Serial.println("*******");
+  delay(1000 * timeEndWord);
+}
+
+void showBreakBetweenElementsOfLetter() {
+  digitalWrite(LED_PIN, LOW);
+  Serial.println("Лампочка выключена");
+  Serial.println("*");
+  delay(1000 * timeBreak);
+}
+
+void showElement(int timeElement) {
+  Serial.println("Лампочка включена");
+  digitalWrite(LED_PIN, HIGH);
+  if (timeElement == 3) {
+    Serial.println("-");
+  }
+  else Serial.println("*");
+  delay(1000 * timeElement);
 }
