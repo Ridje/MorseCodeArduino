@@ -2,18 +2,39 @@
 #define DEBUG 1
 
 char alphabet[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-int moses[5][5] = {
+int moses[26][5] = {
   {1, 3, 0, 0, 0},
   {3, 1, 1, 1, 0},
   {3, 1, 3, 1, 0},
   {3, 1, 1, 0, 0},
-  {1, 0, 0, 0, 0}
+  {1, 0, 0, 0, 0},
+  {1, 1, 3, 1, 0},
+  {3, 3, 1, 0, 0},
+  {1, 1, 1, 1, 0},
+  {1, 1, 0, 0, 0},
+  {1, 3, 3, 3, 0},
+  {3, 1, 3, 0, 0},
+  {1, 3, 1, 1, 0},
+  {3, 3, 0, 0, 0},
+  {3, 1, 0, 0, 0},
+  {3, 3, 3, 0, 0},
+  {1, 3, 3, 1, 0},
+  {3, 3, 1, 3, 0},
+  {1, 3, 1, 0, 0},
+  {1, 1, 1, 0, 0},
+  {3, 0, 0, 0, 0},
+  {1, 1, 3, 0, 0},
+  {1, 1, 1, 3, 0},
+  {1, 3, 3, 0, 0},
+  {3, 1, 1, 3, 0},
+  {3, 1, 3, 3, 0},
+  {3, 3, 1, 1, 0}
 };
 int timeEndWord = 7;
 int timeEndLetter = 3;
 int timeBreak = 1;
 
-String wordToType = "abc";
+String wordToType = "tanya";
 
 void setup() {
 #ifdef DEBUG
@@ -29,7 +50,7 @@ void loop() {
 
 void showWord(String wordToType) {
 #ifdef DEBUG
-  Serial.println("Печать слова");
+  Serial.print("Печать слова "); Serial.println(wordToType);
 #endif
   for (int i = 0; i < wordToType.length(); i++) {
     char currentLetter = wordToType.charAt(i);
@@ -42,16 +63,16 @@ void showWord(String wordToType) {
 
 void showLetter(char letter) {
 #ifdef DEBUG
-  Serial.println("Печать буквы");
+  Serial.print("Печать буквы "); Serial.println(letter);
 #endif
   int elementOfArray = findLetterInAlphabet(letter);
   for (int i = 0; i < sizeof(moses[elementOfArray]) / sizeof(moses[elementOfArray][0]); i++) {
-#ifdef DEBUG
-    Serial.print("Печать элемента "); Serial.println(i);
-#endif
     if (moses[elementOfArray][i] == 0) break;
+#ifdef DEBUG
+    Serial.print("Печать элемента "); Serial.println(i + 1);
+#endif
     showElement(moses[elementOfArray][i]);
-    if (i + 1 != sizeof(moses[elementOfArray]) && moses[elementOfArray][i+1] != 0) {
+    if (i + 1 != sizeof(moses[elementOfArray]) && moses[elementOfArray][i + 1] != 0) {
       showBreakBetweenElementsOfLetter();
     }
   }
