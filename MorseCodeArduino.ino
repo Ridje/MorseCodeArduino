@@ -1,5 +1,6 @@
 #define LED_PIN  13
-#define DEBUG 1
+#define BEEP_PIN 3
+//#define DEBUG 1
 
 char alphabet[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 int moses[26][5] = {
@@ -34,13 +35,14 @@ int timeEndWord = 7;
 int timeEndLetter = 3;
 int timeBreak = 1;
 
-String wordToType = "tanya";
+String wordToType = "GD";
 
 void setup() {
 #ifdef DEBUG
   Serial.begin(9600);
 #endif
   pinMode(LED_PIN, OUTPUT);
+  pinMode(BEEP_PIN, OUTPUT);
 }
 
 void loop() {
@@ -89,31 +91,48 @@ int findLetterInAlphabet(char symbol) {
 
 void showBreakBetweenLetters() {
   digitalWrite(LED_PIN, LOW);
+#ifdef DEBUG
   Serial.println("Лампочка выключена");
   Serial.println("***");
+#endif
   delay(1000 * timeEndLetter);
 }
 
 void showBreakBetweenWords() {
   digitalWrite(LED_PIN, LOW);
+#ifdef DEBUG
   Serial.println("Лампочка выключена");
   Serial.println("*******");
+#endif
   delay(1000 * timeEndWord);
 }
 
 void showBreakBetweenElementsOfLetter() {
   digitalWrite(LED_PIN, LOW);
+#ifdef DEBUG
   Serial.println("Лампочка выключена");
   Serial.println("*");
+#endif
   delay(1000 * timeBreak);
 }
 
 void showElement(int timeElement) {
+#ifdef DEBUG
   Serial.println("Лампочка включена");
+#endif
   digitalWrite(LED_PIN, HIGH);
+  int beep_freq = 400;
   if (timeElement == 3) {
+#ifdef DEBUG
     Serial.println("-");
+#endif
+    beep_freq = 200;
   }
-  else Serial.println("*");
+#ifdef DEBUG
+  else {
+    Serial.println("*");
+  }
+#endif
+  tone(BEEP_PIN, beep_freq, timeElement * 1000);
   delay(1000 * timeElement);
 }
